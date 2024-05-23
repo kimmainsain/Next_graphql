@@ -1,5 +1,6 @@
 import React from "react";
 import "@/app/globals.css";
+import Layout from "@/components/common/Layout";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -8,7 +9,9 @@ interface RootLayoutProps {
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Layout>{children}</Layout>
+      </body>
     </html>
   );
 };
