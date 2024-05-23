@@ -1,39 +1,20 @@
 "use client";
-import Link from "next/link";
 import { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { authState } from "@/recoils/authState";
 import { useRouter } from "next/navigation";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
 
 const Home = () => {
-  const setAuthState = useSetRecoilState(authState);
+  useAuthCheck();
   const isLogin = useRecoilValue(authState);
   const router = useRouter();
 
-  const updateAuthState = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setAuthState(true);
-    } else {
-      setAuthState(false);
-    }
-  };
-
   useEffect(() => {
-    updateAuthState();
-  }, []);
-
-  useEffect(() => {
-    if (!isLogin) {
-      router.push("/users/login");
-    }
+    if (!isLogin) router.push("/users/login");
   }, [isLogin, router]);
 
-  return (
-    <div>
-      <Link href="/solplaces/create">linkTest</Link>
-    </div>
-  );
+  return <div>홈 화면이 나오는 공간입니다. ㅇㅅㅇ</div>;
 };
 
 export default Home;
