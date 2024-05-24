@@ -2,6 +2,7 @@
 import { useQuery } from "@apollo/client";
 import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 import Image from "next/image";
+import pencli from "@/assets/png/List/pencli.png";
 
 const ListPage = () => {
   const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOGS, {
@@ -14,29 +15,36 @@ const ListPage = () => {
   console.log(data);
 
   return (
-    <div className="p-4 mb-12 grid grid-cols-2 gap-6">
-      {data?.fetchSolplaceLogs?.map((log: any) => {
-        const images = JSON.parse(log.images)[0];
-        return (
-          <div
-            key={log.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-          >
-            <div className="h-48 w-full relative">
-              <Image
-                src={images}
-                alt={log.solplaceName}
-                layout="fill"
-                objectFit="cover"
-              />
+    <div>
+      <div className="p-4 mb-12 grid grid-cols-2 gap-4">
+        {data?.fetchSolplaceLogs?.map((log: any) => {
+          const images = JSON.parse(log.images)[0];
+          return (
+            <div key={log.id} className="bg-white">
+              <div className="h-48 w-full relative">
+                <Image
+                  src={images}
+                  alt={log.solplaceName}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </div>
+              <div className="py-4">
+                <div className="text-mg font-semibold mb-1">
+                  {log.solplaceName}
+                </div>
+                <div className="text-gray-600">{log.introduction}</div>
+              </div>
             </div>
-            <div className="p-4">
-              <h3 className="text-mg font-semibold mb-2">{log.solplaceName}</h3>
-              <p className="text-gray-600">{log.introduction}</p>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+      <div>
+        <button className="flex items-center justify-center fixed rounded-full bottom-16 right-4 w-12 h-12 bg-blue-500">
+          <Image src={pencli} alt="pencli" />
+        </button>
+      </div>
     </div>
   );
 };
