@@ -14,7 +14,7 @@ const MainPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-gorw justify-center items-center font-bold text-xl">
+    <div className="flex justify-center items-center h-full font-bold text-xl">
       {userName}님 환영합니다.
     </div>
   );
