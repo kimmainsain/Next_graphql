@@ -1,8 +1,10 @@
+"use client";
+
 const listPage = () => {
   return (
-    <div>
-      <h1>Solplaces</h1>
-    </div>
+    <>
+      <div>listPage</div>
+    </>
   );
 };
 

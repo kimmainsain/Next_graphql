@@ -5,7 +5,7 @@ const ButtonField = ({ onClick, enabled, text, type }: ButtonType) => {
     <button
       onClick={onClick}
       type={type}
-      className={`w-full p-4 rounded-lg font-semibold ${
+      className={`w-full px-4 py-3 rounded-lg font-medium ${
         enabled
           ? "bg-blue-600 text-white cursor-pointer"
           : "bg-gray-100 text-gray-300 cursor-not-allowed"
