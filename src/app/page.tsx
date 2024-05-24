@@ -12,9 +12,10 @@ const Home = () => {
 
   useEffect(() => {
     if (!isLogin) router.push("/users/login");
+    else router.push("/users/main");
   }, [isLogin, router]);
 
-  return <div>홈 화면이 나오는 공간입니다. ㅇㅅㅇ</div>;
+  return <div>로딩 화면 ㅇㅅㅇ</div>;
 };
 
 export default Home;
