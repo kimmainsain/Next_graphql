@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import { LOGIN_MUTATION } from "@/graphql/mutations";
 import InputField from "@/components/common/Input/InputField";
 import ButtonField from "@/components/common/Button/ButtonField";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { authState } from "@/recoils/authState";
+import { useSetRecoilState } from "recoil";
 
 type LoginInputType = {
   email: string;
@@ -17,6 +20,8 @@ const LoginPage = () => {
   const { handleSubmit, register, watch } = useForm<LoginInputType>();
   const email = watch("email");
   const password = watch("password");
+  const router = useRouter();
+  const setAuthState = useSetRecoilState(authState);
 
   useEffect(() => {
     if (email && password) setIsButtonEnabled(true);
@@ -33,7 +38,11 @@ const LoginPage = () => {
           },
         },
       });
-      console.log(data.login);
+      const { accessToken, name } = data.login;
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("name", name);
+      setAuthState(true);
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
