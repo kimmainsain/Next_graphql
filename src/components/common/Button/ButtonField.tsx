@@ -1,9 +1,10 @@
 import { ButtonType } from "@/types/button/buttonType";
 
-const ButtonField = ({ onClick, enabled, text }: ButtonType) => {
+const ButtonField = ({ onClick, enabled, text, type }: ButtonType) => {
   return (
     <button
       onClick={onClick}
+      type={type}
       className={`w-full p-4 rounded-lg font-semibold ${
         enabled
           ? "bg-blue-600 text-white cursor-pointer"
