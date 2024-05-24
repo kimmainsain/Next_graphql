@@ -2,21 +2,19 @@
 import { useMutation } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { LOGIN_MUTATION } from "@/graphql/mutations";
-import InputField from "@/components/common/Input/InputField";
-import ButtonField from "@/components/common/Button/ButtonField";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { authState } from "@/recoils/authState";
 import { useSetRecoilState } from "recoil";
-
-type LoginInputType = {
-  email: string;
-  password: string;
-};
+import { LoginInputType } from "@/types/login/loginInputType";
+import InputField from "@/components/common/Input/InputField";
+import ButtonField from "@/components/common/Button/ButtonField";
+import ModalField from "@/components/common/Modal/ModalField";
 
 const LoginPage = () => {
   const [login] = useMutation(LOGIN_MUTATION);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { handleSubmit, register, watch } = useForm<LoginInputType>();
   const email = watch("email");
   const password = watch("password");
@@ -44,12 +42,20 @@ const LoginPage = () => {
       setAuthState(true);
       router.push("/");
     } catch (error) {
+      setIsVisible(true);
       console.log(error);
     }
   };
 
   return (
     <form className="flex flex-col py-2 mt-20">
+      <ModalField
+        message="잘못된 로그인 정보입니다."
+        buttonMessage="다시 확인하기"
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+      />
+
       <InputField
         label="이메일"
         type="email"
