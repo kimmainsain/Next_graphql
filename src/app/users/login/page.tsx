@@ -1,15 +1,7 @@
 "use client";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useState, useEffect } from "react";
-
-const LOGIN_MUTATION = gql`
-  mutation Login($loginInput: LoginInput!) {
-    login(loginInput: $loginInput) {
-      accessToken
-      name
-    }
-  }
-`;
+import { LOGIN_MUTATION } from "@/graphql/mutations";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -18,18 +10,13 @@ const LoginPage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
   useEffect(() => {
-    if (email && password) {
-      setIsButtonEnabled(true);
-    } else {
-      setIsButtonEnabled(false);
-    }
+    if (email && password) setIsButtonEnabled(true);
+    else setIsButtonEnabled(false);
   }, [email, password]);
 
   const handleLogin = async () => {
-    console.log("Click");
     try {
       const { data } = await login({
-        mutation: LOGIN_MUTATION,
         variables: {
           loginInput: {
             email,
