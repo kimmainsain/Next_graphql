@@ -10,9 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex-grow flex justify-center items-center">
-        {children}
-      </div>
+      {children}
       <Footer />
     </div>
   );
