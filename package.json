@@ -24,6 +24,7 @@
     "react-hook-form": "^7.51.5",
     "recoil": "^0.7.7",
     "tailwindcss": "3.4.3",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "usehooks-ts": "^3.1.0"
   }
 }
