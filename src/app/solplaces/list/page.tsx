@@ -13,44 +13,43 @@ const ListPage = () => {
   const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {
     variables: { page },
   });
-  // const { isIntersecting, ref } = useIntersectionObserver({
-  //   threshold: 0.5,
-  // });
+  const [logs, setLogs] = useState<SolplaceLog[]>([]);
+  const { isIntersecting, ref } = useIntersectionObserver({
+    threshold: 0.5,
+  });
+
+  useEffect(() => {
+    if (isIntersecting && page < MAX_SOLPLACE_LOG_PAGES) {
+      fetchMoreLogs();
+    }
+  }, [isIntersecting]);
+
+  useEffect(() => {
+    if (data) {
+      setLogs([...logs, ...data.fetchSolplaceLogs]);
+    }
+  }, [data]);
 
   const fetchMoreLogs = async () => {
-    if (page < MAX_SOLPLACE_LOG_PAGES) {
-      await fetchMore({
-        variables: { page: page + 1 },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          console.log(prev, fetchMoreResult, "prev, fetchMoreResult");
-          if (!fetchMoreResult) {
-            return prev;
-          }
-          return {
-            fetchSolplaceLogs: [
-              ...prev.fetchSolplaceLogs,
-              ...fetchMoreResult.fetchSolplaceLogs,
-            ],
-          };
-        },
-      });
-      setPage((prevPage) => prevPage + 1);
-    }
+    await fetchMore({
+      variables: { page: page + 1 },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) {
+          return prev;
+        }
+        return {
+          fetchSolplaceLogs: [
+            ...prev.fetchSolplaceLogs,
+            ...fetchMoreResult.fetchSolplaceLogs,
+          ],
+        };
+      },
+    });
+    setPage((prevPage) => prevPage + 1);
   };
-
-  console.log(data, "data");
-
-  // useEffect(() => {
-  //   console.log(isIntersecting, "isIntersecting");
-  //   if (isIntersecting && !loading) {
-  //     fetchMoreLogs();
-  //   }
-  // }, [isIntersecting, loading]);
 
   if (loading && page === 1) return "Loading...";
   if (error) return `Error! ${error.message}`;
-
-  const logs = data ? data.fetchSolplaceLogs : [];
 
   return (
     <div>
@@ -77,7 +76,7 @@ const ListPage = () => {
           );
         })}
       </div>
-      {/* <div ref={ref} className="h-1"></div> */}
+      <div ref={ref} className="h-1"></div>
       {loading && page > 1 && <div>Loading more...</div>}
       <div>
         <button
