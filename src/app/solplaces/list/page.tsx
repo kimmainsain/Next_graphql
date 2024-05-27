@@ -54,7 +54,7 @@ const ListPage = () => {
   };
 
   if (loading && page === 1) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+  if (error) return `Error! ${error}`;
 
   return (
     <div>
