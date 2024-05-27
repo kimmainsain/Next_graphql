@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 import pencli from "@/assets/png/List/pencli.png";
-import SolplaceLogCard from "@/components/solplace/list/SolplaceLogCard";
+import SolplaceLogCard from "@/components/solplace/List/SolplaceLogCard";
 
 const ListPage = () => {
   const [page, setPage] = useState<number>(1);
