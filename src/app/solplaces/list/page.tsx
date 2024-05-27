@@ -5,15 +5,14 @@ import { useState, useEffect } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 import { SolplaceLog } from "@/types/solplace/solplaceLogType";
 import { MAX_SOLPLACE_LOG_PAGES } from "@/constants/solplaceLog";
-import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 import pencli from "@/assets/png/List/pencli.png";
 import SolplaceLogCard from "@/components/solplace/List/SolplaceLogCard";
+import Link from "next/link";
 
 const ListPage = () => {
   const [page, setPage] = useState<number>(1);
-  const router = useRouter();
   const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {
     variables: { page },
   });
@@ -65,14 +64,11 @@ const ListPage = () => {
       </div>
       <div ref={ref} className="h-1"></div>
       {loading && page > 1 && <div>Loading more...</div>}
-      <div>
-        <button
-          className="flex items-center justify-center fixed rounded-full bottom-16 right-4 w-12 h-12 bg-blue-500"
-          onClick={() => router.push("/solplaces/create")}
-        >
+      <Link href={`/solplaces/create`}>
+        <div className="flex items-center justify-center fixed rounded-full bottom-16 right-4 w-12 h-12 bg-blue-500">
           <Image src={pencli} alt="pencli" />
-        </button>
-      </div>
+        </div>
+      </Link>
     </div>
   );
 };

@@ -1,38 +1,27 @@
-"use client";
-import { useState } from "react";
-import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
+import { PhotoCardType } from "@/types/card/PhotoCardType";
+import Image from "next/image";
 
-const PictureCard = () => {
-  const [pictures, setPictures] = useState<string[]>([
-    "dummy",
-    "dummy2",
-    "dummy3",
-    "dummy4",
-  ]);
-
-  const handleAddPicture = () => {
-    console.log("Add Picture");
-  };
-
-  const handleRemovePicture = (index: number) => {
-    console.log("Remove Picture", index);
-  };
-
+const PhotoCard = ({ photos, onAddPhoto, onRemovePhoto }: PhotoCardType) => {
   return (
     <div className="flex overflow-x-auto space-x-2">
       <div
         className="w-24 h-24 border-2 rounded-md flex flex-col justify-center items-center cursor-pointer flex-shrink-0"
-        onClick={handleAddPicture}
+        onClick={onAddPhoto}
       >
         <div className="text-4xl">+</div>
         <div className="text-center">사진 등록</div>
       </div>
-      {pictures.map((picture, index) => (
+      {photos?.map((photo: string, index: number) => (
         <div
           key={index}
-          className="relative w-24 h-24 flex-shrink-0 bg-red-500 rounded-md"
+          className="relative w-24 h-24 flex-shrink-0 bg-gray-200 rounded-lg"
         >
-          <img src={picture} alt={`Picture ${index + 1}`} />
+          <Image
+            src={photo}
+            alt={`Photo ${index + 1}`}
+            fill
+            className="rounded-lg"
+          />
           {index === 0 && (
             <div className="absolute top-1 left-1 bg-white text-black text-xs px-1 rounded">
               대표
@@ -40,7 +29,7 @@ const PictureCard = () => {
           )}
           <button
             className="absolute top-1 right-1 bg-white rounded-full cursor-pointer"
-            onClick={() => handleRemovePicture(index)}
+            onClick={() => onRemovePhoto(index)}
           >
             <div className="text-xs">X</div>
           </button>
@@ -50,4 +39,4 @@ const PictureCard = () => {
   );
 };
 
-export default PictureCard;
+export default PhotoCard;
