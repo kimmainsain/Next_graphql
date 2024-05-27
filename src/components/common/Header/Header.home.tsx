@@ -10,9 +10,9 @@ const Header = () => {
       <Link href="/" className="">
         <Image src={wordmark} alt="wordmark" />
       </Link>
-      <Link href="/" className="">
+      <div className="">
         <Image src={notification} alt="notification" />
-      </Link>
+      </div>
     </div>
   );
 };

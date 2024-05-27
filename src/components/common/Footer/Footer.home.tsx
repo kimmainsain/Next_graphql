@@ -18,7 +18,7 @@ const Footer = () => {
         </Link>
       </div>
       <div className="flex flex-col items-center">
-        <Link href="/solplace">
+        <Link href="/solplaces/list">
           <div className="flex flex-col items-center">
             <Image src={unselectedSol} alt="unselectedSearch" />
             <div className="text-xs">솔플레이스</div>

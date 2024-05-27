@@ -1,16 +1,21 @@
-import Link from "next/link";
-import Layout from "../components/common/Layout";
+"use client";
+import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { authState } from "@/recoils/authState";
+import { useRouter } from "next/navigation";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
 
 const Home = () => {
-  return (
-    <div>
-      <Layout>
-        <Link href="/linkTest">linkTest</Link>
-        <br />
-        <Link href="/hihi">hihi</Link>
-      </Layout>
-    </div>
-  );
+  useAuthCheck();
+  const isLogin = useRecoilValue(authState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLogin) router.push("/users/login");
+    else router.push("/users/main");
+  }, [isLogin, router]);
+
+  return <div>로딩 화면 ㅇㅅㅇ</div>;
 };
 
 export default Home;

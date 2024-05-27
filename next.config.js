@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
-const prefix = process.env.NODE_ENV === 'production' ? 'https://kimmainsain.github.io/Solotrip/' : ''
-
 const nextConfig = {
-  output: "export",
-  assetPrefix: prefix,
-}
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "develop.cdn.solotrip.kr",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
