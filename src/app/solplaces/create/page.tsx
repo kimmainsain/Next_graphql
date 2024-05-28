@@ -64,17 +64,21 @@ const CreatePage = () => {
       </div>
       <div>
         <form className="flex flex-col py-2">
-          <InputField
-            label="다녀온 솔플레이스"
-            type="text"
-            placeholder="솔플레이스를 선택해 주세요"
-            register={register("title")}
-          />
-          <InputTextAreaField
-            label="솔플 노트"
-            placeholder="취향에 맞는 장소였나요? 공간의 분위기, 꿀팁 등 혼자 방문하기 좋은 이유를 기록해 보세요."
-            register={register("content")}
-          />
+          <div className="mx-4 my-3">
+            <InputField
+              label="다녀온 솔플레이스"
+              type="text"
+              placeholder="솔플레이스를 선택해 주세요"
+              register={register("title")}
+            />
+          </div>
+          <div className="mx-4 my-3">
+            <InputTextAreaField
+              label="솔플 노트"
+              placeholder="취향에 맞는 장소였나요? 공간의 분위기, 꿀팁 등 혼자 방문하기 좋은 이유를 기록해 보세요."
+              register={register("content")}
+            />
+          </div>
           <div className="flex m-4 gap-2">
             <ButtonField
               onClick={handleSubmit(handleCreate)}

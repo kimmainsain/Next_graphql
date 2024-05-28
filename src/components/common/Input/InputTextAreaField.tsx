@@ -2,7 +2,7 @@ import { InputType } from "@/types/input/inputType";
 
 const InputTextAreaField = ({ label, placeholder, register }: InputType) => {
   return (
-    <div className="flex flex-col mx-4 my-3">
+    <div className="flex flex-col">
       <div className="mb-2 font-semibold text-gray-500">{label}</div>
       <textarea
         placeholder={placeholder}

@@ -27,19 +27,22 @@ const LoginPage = () => {
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
       />
-
-      <InputLoginField
-        label="이메일"
-        type="email"
-        placeholder="이메일을 입력해 주세요"
-        register={register("email")}
-      />
-      <InputLoginField
-        label="비밀번호"
-        type="password"
-        placeholder="비밀번호를 입력해 주세요"
-        register={register("password")}
-      />
+      <div className="mx-4 my-3">
+        <InputLoginField
+          label="이메일"
+          type="email"
+          placeholder="이메일을 입력해 주세요"
+          register={register("email")}
+        />
+      </div>
+      <div className="mx-4 my-3">
+        <InputLoginField
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력해 주세요"
+          register={register("password")}
+        />
+      </div>
       <div className="m-4">
         <ButtonField
           onClick={handleSubmit(handleLogin)}
