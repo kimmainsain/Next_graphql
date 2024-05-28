@@ -1,6 +1,5 @@
 "use client";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
-import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
@@ -9,6 +8,8 @@ import { headerTextState } from "@/recoils/headerState";
 import { CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
+import { usePhoto } from "@/hooks/usePhoto";
+import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
@@ -16,7 +17,6 @@ import ButtonField from "@/components/common/Button/ButtonField";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [photos, setPhotos] = useState<string[]>([]);
   const setHeaderText = useSetRecoilState(headerTextState);
   const [createSolplaceLogBySolplaceName] = useMutation(
     CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME
@@ -28,7 +28,7 @@ const CreatePage = () => {
       content: "",
     },
   });
-
+  const { photos, handleAddPhoto, handleRemovePhoto } = usePhoto();
   const title = watch("title");
   const content = watch("content");
 
@@ -40,17 +40,6 @@ const CreatePage = () => {
   useEffect(() => {
     setHeaderText("솔플레이스 로그 등록");
   }, []);
-
-  const handleAddPhoto = () => {
-    if (photos.length >= MAX_SOLPLACE_LOG_PICTURES) return;
-    const test = "https://picsum.photos/300/300";
-    setPhotos([...photos, test]);
-  };
-
-  const handleRemovePhoto = (index: number) => {
-    const newPhotos = photos.filter((_, idx) => idx !== index);
-    setPhotos(newPhotos);
-  };
 
   const handleCreate = async () => {
     try {

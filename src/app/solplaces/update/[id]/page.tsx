@@ -9,14 +9,15 @@ import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { DELETE_SOLPLACE_LOG_BY_ID } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { headerTextState } from "@/recoils/headerState";
+import { usePhoto } from "@/hooks/usePhoto";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
 import ButtonMediumField from "@/components/common/Button/ButtonMediumField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
-import { useSetRecoilState } from "recoil";
-import { headerTextState } from "@/recoils/headerState";
 
 const SolplaceUpdatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -36,13 +37,15 @@ const SolplaceUpdatePage = () => {
       },
     }
   );
-
+  const { photos, setPhotos, handleAddPhoto, handleRemovePhoto } = usePhoto();
   const title = watch("title");
   const content = watch("content");
 
   useEffect(() => {
     if (data) {
       setHeaderText(`${data.fetchSolplaceLogById.solplaceName} 수정`);
+      const photosProps = JSON.parse(data.fetchSolplaceLogById.images);
+      setPhotos(photosProps);
       reset({
         title: data.fetchSolplaceLogById.solplaceName,
         content: data.fetchSolplaceLogById.introduction,
@@ -54,14 +57,6 @@ const SolplaceUpdatePage = () => {
     if (title && content) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
   }, [title, content]);
-
-  const handleAddPhoto = () => {
-    console.log("Add Photo");
-  };
-
-  const handleRemovePhoto = (index: number) => {
-    console.log("Remove Photo", index);
-  };
 
   const handleUpdate = () => {
     console.log("Login");
@@ -83,7 +78,6 @@ const SolplaceUpdatePage = () => {
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error}`;
-  const photos = JSON.parse(data?.fetchSolplaceLogById.images);
 
   return (
     <>
