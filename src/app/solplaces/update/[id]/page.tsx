@@ -106,7 +106,7 @@ const SolplaceUpdatePage = () => {
               register={register("content")}
             />
           </div>
-          <div className="flex m-4 gap-2">
+          <div className="flex gap-2 fixed bottom-12 w-full px-4">
             <ButtonMediumField
               onClick={handleSubmit(handleDelete)}
               enabled={false}

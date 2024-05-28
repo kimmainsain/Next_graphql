@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
-import ButtonField from "@/components/common/Button/ButtonMediumField";
+import ButtonField from "@/components/common/Button/ButtonField";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
@@ -78,8 +78,12 @@ const CreatePage = () => {
               placeholder="취향에 맞는 장소였나요? 공간의 분위기, 꿀팁 등 혼자 방문하기 좋은 이유를 기록해 보세요."
               register={register("content")}
             />
+            <div className="text-xs text-gray-500">
+              * 부적절하거나 불쾌감을 줄 수 있는 내용이 포함될 경우 로그가 숨김
+              처리될 수 있습니다.
+            </div>
           </div>
-          <div className="flex m-4 gap-2">
+          <div className="flex justify-center fixed bottom-12 w-full px-4">
             <ButtonField
               onClick={handleSubmit(handleCreate)}
               enabled={isButtonEnabled}
