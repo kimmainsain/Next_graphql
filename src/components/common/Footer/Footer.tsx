@@ -29,7 +29,7 @@ const Footer = () => {
 const MainFooter = () => {
   const pathname = usePathname();
   const activePaths = {
-    home: ["/", "/users/main"],
+    home: ["/", "/users/main", "/users/login"],
     solplaces: ["/solplaces/list"],
   };
   const isActive = (paths: string[]) => paths.includes(pathname);
