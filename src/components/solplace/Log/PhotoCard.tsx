@@ -9,7 +9,7 @@ const PhotoCard = ({ photos, onAddPhoto, onRemovePhoto }: PhotoCardType) => {
         onClick={onAddPhoto}
       >
         <div className="text-4xl">+</div>
-        <div className="text-center">사진 등록</div>
+        <div className="text-center text-sm">사진 등록</div>
       </div>
       {photos?.map((photo: string, index: number) => (
         <div
