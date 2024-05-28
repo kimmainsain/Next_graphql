@@ -1,12 +1,14 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
+import { DELETE_SOLPLACE_LOG_BY_ID } from "@/graphql/mutations";
+import { useRouter } from "next/navigation";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -22,6 +24,8 @@ const SolplaceUpdatePage = () => {
   const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOG_BY_ID, {
     variables: { id: params.id },
   });
+  const router = useRouter();
+  const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID);
   const setHeaderText = useSetRecoilState(headerTextState);
 
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
@@ -63,13 +67,22 @@ const SolplaceUpdatePage = () => {
     console.log("Login");
   };
 
-  const handleDelete = () => {
-    console.log("Delete");
+  const handleDelete = async () => {
+    try {
+      const result = await deleteSolplaceLogById({
+        variables: {
+          id: params.id,
+        },
+      });
+      console.log("result", result);
+      router.back();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error}`;
-  console.log(data?.fetchSolplaceLogById);
   const photos = JSON.parse(data?.fetchSolplaceLogById.images);
 
   return (

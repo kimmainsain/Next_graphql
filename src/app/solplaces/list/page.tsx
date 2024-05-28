@@ -4,7 +4,10 @@ import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 import { useState, useEffect } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 import { SolplaceLog } from "@/types/solplace/solplaceLogType";
-import { MAX_SOLPLACE_LOG_PAGES } from "@/constants/solplaceLog";
+import {
+  MAX_SOLPLACE_LOG_PAGES,
+  SOLPLACE_LOG_PAGES_SCROOL_SIZE,
+} from "@/constants/solplaceLog";
 
 import Image from "next/image";
 import pencli from "@/assets/png/List/pencli.png";
@@ -25,7 +28,11 @@ const ListPage = () => {
   useEffect(() => {
     console.log("isIntersecting", isIntersecting);
     console.log("page", page);
-    if (isIntersecting && page < MAX_SOLPLACE_LOG_PAGES) {
+    if (
+      isIntersecting &&
+      page <=
+        Math.floor(MAX_SOLPLACE_LOG_PAGES / SOLPLACE_LOG_PAGES_SCROOL_SIZE)
+    ) {
       fetchMoreLogs();
     }
   }, [isIntersecting]);

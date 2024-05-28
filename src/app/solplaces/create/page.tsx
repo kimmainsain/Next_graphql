@@ -18,8 +18,9 @@ const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
   const setHeaderText = useSetRecoilState(headerTextState);
-  const [createSolplaceLogBySolplaceName, { data, loading, error }] =
-    useMutation(CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME);
+  const [createSolplaceLogBySolplaceName] = useMutation(
+    CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME
+  );
   const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {

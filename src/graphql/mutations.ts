@@ -28,3 +28,9 @@ export const CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME = gql`
     }
   }
 `;
+
+export const DELETE_SOLPLACE_LOG_BY_ID = gql`
+  mutation DeleteSolplaceLogById($id: ID!) {
+    deleteSolplaceLogById(id: $id)
+  }
+`;
