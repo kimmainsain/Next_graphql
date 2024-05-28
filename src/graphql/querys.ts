@@ -14,3 +14,18 @@ export const FETCH_SOLPLACE_LOGS = gql`
     }
   }
 `;
+
+export const FETCH_SOLPLACE_LOG_BY_ID = gql`
+  query fetchSolplaceLogById($id: ID!) {
+    fetchSolplaceLogById(id: $id) {
+      id
+      introduction
+      solplaceName
+      images
+      userId
+      createdAt
+      updatedAt
+      deletedAt
+    }
+  }
+`;

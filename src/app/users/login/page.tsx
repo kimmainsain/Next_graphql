@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useLogin } from "@/hooks/useLogin";
 import { LoginInputType } from "@/types/login/loginInputType";
-import InputField from "@/components/common/Input/InputField";
+import InputLoginField from "@/components/common/Input/InputLoginField";
 import ButtonField from "@/components/common/Button/ButtonField";
 import ModalField from "@/components/common/Modal/ModalField";
 
@@ -27,19 +27,22 @@ const LoginPage = () => {
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
       />
-
-      <InputField
-        label="이메일"
-        type="email"
-        placeholder="이메일을 입력해 주세요"
-        register={register("email")}
-      />
-      <InputField
-        label="비밀번호"
-        type="password"
-        placeholder="비밀번호를 입력해 주세요"
-        register={register("password")}
-      />
+      <div className="mx-4 my-3">
+        <InputLoginField
+          label="이메일"
+          type="email"
+          placeholder="이메일을 입력해 주세요"
+          register={register("email")}
+        />
+      </div>
+      <div className="mx-4 my-3">
+        <InputLoginField
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력해 주세요"
+          register={register("password")}
+        />
+      </div>
       <div className="m-4">
         <ButtonField
           onClick={handleSubmit(handleLogin)}

@@ -1,16 +1,17 @@
 import { InputType } from "@/types/input/inputType";
-const InputField = ({ label, type, placeholder, register }: InputType) => {
+
+const InputTextAreaField = ({ label, placeholder, register }: InputType) => {
   return (
-    <div className="flex flex-col mx-4 my-3">
+    <div className="flex flex-col">
       <div className="mb-2 font-semibold text-gray-500">{label}</div>
-      <input
-        type={type}
+      <textarea
         placeholder={placeholder}
         {...register}
         className="w-full px-4 py-3 mb-4 border border-gray-400 rounded-md text-sm"
+        rows="5"
       />
     </div>
   );
 };
 
-export default InputField;
+export default InputTextAreaField;

@@ -11,6 +11,7 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(isLogin);
     if (!isLogin) router.push("/users/login");
     else router.push("/users/main");
   }, [isLogin, router]);

@@ -1,1 +1,2 @@
 export const MAX_SOLPLACE_LOG_PAGES = 4;
+export const MAX_SOLPLACE_LOG_PICTURES = 5;
