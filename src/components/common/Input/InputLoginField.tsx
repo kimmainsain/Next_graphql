@@ -1,5 +1,5 @@
 import { InputType } from "@/types/input/inputType";
-const InputField = ({ label, type, placeholder, register }: InputType) => {
+const InputLoginField = ({ label, type, placeholder, register }: InputType) => {
   return (
     <div className="flex flex-col mx-4 my-3">
       <div className="mb-2 font-semibold text-gray-500">{label}</div>
@@ -13,4 +13,4 @@ const InputField = ({ label, type, placeholder, register }: InputType) => {
   );
 };
 
-export default InputField;
+export default InputLoginField;

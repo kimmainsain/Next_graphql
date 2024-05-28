@@ -1,6 +1,6 @@
 export type InputType = {
   label: string;
-  type: string;
+  type?: string;
   placeholder: string;
   register: any;
 };
