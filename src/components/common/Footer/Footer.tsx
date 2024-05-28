@@ -49,12 +49,7 @@ const MainFooter = () => {
 };
 
 const SubFooter = () => {
-  return (
-    <div>
-      임시 푸터
-      <div>테스트중</div>
-    </div>
-  );
+  return <div>임시 푸터</div>;
 };
 
 const EmptyFooter = () => {

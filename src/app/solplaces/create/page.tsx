@@ -7,11 +7,13 @@ import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import ButtonField from "@/components/common/Button/ButtonMediumField";
 import { VisitedLogInputType } from "@/types/input/inputType";
-
+import { useSetRecoilState } from "recoil";
+import { headerTextState } from "@/recoils/headerState";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
+  const setHeaderText = useSetRecoilState(headerTextState);
 
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {
@@ -26,6 +28,10 @@ const CreatePage = () => {
     if (title && content) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
   }, [title, content]);
+
+  useEffect(() => {
+    setHeaderText("솔플레이스 로그 등록");
+  }, []);
 
   const handleAddPhoto = () => {
     console.log("Add Photo");

@@ -13,6 +13,8 @@ import ModalField from "@/components/common/Modal/ModalField";
 import ButtonMediumField from "@/components/common/Button/ButtonMediumField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
+import { useSetRecoilState } from "recoil";
+import { headerTextState } from "@/recoils/headerState";
 
 const SolplaceUpdatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -20,6 +22,7 @@ const SolplaceUpdatePage = () => {
   const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOG_BY_ID, {
     variables: { id: params.id },
   });
+  const setHeaderText = useSetRecoilState(headerTextState);
 
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
     {
@@ -35,6 +38,7 @@ const SolplaceUpdatePage = () => {
 
   useEffect(() => {
     if (data) {
+      setHeaderText(`${data.fetchSolplaceLogById.solplaceName} 수정`);
       reset({
         title: data.fetchSolplaceLogById.solplaceName,
         content: data.fetchSolplaceLogById.introduction,

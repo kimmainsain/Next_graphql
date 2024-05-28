@@ -3,7 +3,10 @@ import Link from "next/link";
 import notification from "@/assets/png/Header/notification_24.png";
 import wordmark from "@/assets/png/Header/wordmark_e.png";
 import Image from "next/image";
+
 import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
+import { headerTextState } from "@/recoils/headerState";
 
 type HeaderMapType = {
   [key: string]: React.ComponentType;
@@ -15,11 +18,17 @@ const Header = () => {
     "/users/main": MainHeader,
     "/": MainHeader,
     "/users/login": MainHeader,
-    "/solplaces/create": SubHeader,
+    "/solplaces/create": HeaderWithText,
+    "/solplaces/update": HeaderWithText,
   };
 
-  const DefaultHeader = EmptyHeader;
-  const SelectedHeader = headerMap[pathname] || DefaultHeader;
+  const findHeaderComponent = (path: string) => {
+    if (headerMap[path]) return headerMap[path];
+    if (path.startsWith("/solplaces/update/")) return HeaderWithText;
+    return EmptyHeader;
+  };
+
+  const SelectedHeader = findHeaderComponent(pathname);
   return <SelectedHeader />;
 };
 
@@ -36,8 +45,13 @@ const MainHeader = () => {
   );
 };
 
-const SubHeader = () => {
-  return <div>임시 헤더 테스트중</div>;
+const HeaderWithText = () => {
+  const text = useRecoilValue(headerTextState);
+  return (
+    <div className="flex justify-center items-center h-12">
+      <div className="text-lg font-bold">{text}</div>
+    </div>
+  );
 };
 
 const EmptyHeader = () => {
