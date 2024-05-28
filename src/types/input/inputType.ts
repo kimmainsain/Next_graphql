@@ -4,3 +4,8 @@ export type InputType = {
   placeholder: string;
   register: any;
 };
+
+export type VisitedLogInputType = {
+  title: string;
+  content: string;
+};

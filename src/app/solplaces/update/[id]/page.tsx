@@ -6,17 +6,13 @@ import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { VisitedLogInputType } from "@/types/input/inputType";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
 import ButtonMediumField from "@/components/common/Button/ButtonMediumField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
-
-type VisitedLogType = {
-  title: string;
-  content: string;
-};
 
 const SolplaceUpdatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -25,12 +21,14 @@ const SolplaceUpdatePage = () => {
     variables: { id: params.id },
   });
 
-  const { handleSubmit, register, watch, reset } = useForm<VisitedLogType>({
-    defaultValues: {
-      title: "",
-      content: "",
-    },
-  });
+  const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
+    {
+      defaultValues: {
+        title: "",
+        content: "",
+      },
+    }
+  );
 
   const title = watch("title");
   const content = watch("content");
