@@ -8,3 +8,23 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+export const CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME = gql`
+  mutation CreateSolplaceLogBySolplaceName(
+    $solplaceName: String!
+    $createSolplaceLogInput: CreateSolplaceLogInput!
+  ) {
+    createSolplaceLogBySolplaceName(
+      solplaceName: $solplaceName
+      createSolplaceLogInput: $createSolplaceLogInput
+    ) {
+      id
+      introduction
+      solplaceName
+      images
+      userId
+      createdAt
+      updatedAt
+      deletedAt
+    }
+  }
+`;

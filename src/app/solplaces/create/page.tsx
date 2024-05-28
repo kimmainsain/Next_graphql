@@ -3,18 +3,24 @@ import PhotoCard from "@/components/solplace/Log/PhotoCard";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import InputField from "@/components/common/Input/InputLoginField";
-import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
-import ButtonField from "@/components/common/Button/ButtonField";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
+import { CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME } from "@/graphql/mutations";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
+
+import InputField from "@/components/common/Input/InputLoginField";
+import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
+import ButtonField from "@/components/common/Button/ButtonField";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]);
   const setHeaderText = useSetRecoilState(headerTextState);
-
+  const [createSolplaceLogBySolplaceName, { data, loading, error }] =
+    useMutation(CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME);
+  const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {
       title: "",
@@ -24,25 +30,43 @@ const CreatePage = () => {
 
   const title = watch("title");
   const content = watch("content");
+
   useEffect(() => {
-    if (title && content) setIsButtonEnabled(true);
+    if (title && content && photos.length > 0) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
-  }, [title, content]);
+  }, [title, content, photos]);
 
   useEffect(() => {
     setHeaderText("솔플레이스 로그 등록");
   }, []);
 
   const handleAddPhoto = () => {
-    console.log("Add Photo");
+    if (photos.length >= MAX_SOLPLACE_LOG_PICTURES) return;
+    const test = "https://picsum.photos/300/300";
+    setPhotos([...photos, test]);
   };
 
   const handleRemovePhoto = (index: number) => {
-    console.log("Remove Photo", index);
+    const newPhotos = photos.filter((_, idx) => idx !== index);
+    setPhotos(newPhotos);
   };
 
-  const handleCreate = () => {
-    console.log("솔플레이스 로그 등록");
+  const handleCreate = async () => {
+    try {
+      const result = await createSolplaceLogBySolplaceName({
+        variables: {
+          solplaceName: title,
+          createSolplaceLogInput: {
+            introduction: content,
+            images: photos,
+          },
+        },
+      });
+      router.push("/solplaces/list");
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

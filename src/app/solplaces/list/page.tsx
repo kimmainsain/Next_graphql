@@ -8,13 +8,14 @@ import { MAX_SOLPLACE_LOG_PAGES } from "@/constants/solplaceLog";
 
 import Image from "next/image";
 import pencli from "@/assets/png/List/pencli.png";
-import SolplaceLogCard from "@/components/solplace/List/SolplaceLogCard";
+import SolplaceLogCard from "@/components/solplace/list/SolplaceLogCard";
 import Link from "next/link";
 
 const ListPage = () => {
   const [page, setPage] = useState<number>(1);
   const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {
     variables: { page },
+    fetchPolicy: "network-only",
   });
   const [logs, setLogs] = useState<SolplaceLog[]>([]);
   const { isIntersecting, ref } = useIntersectionObserver({
@@ -22,6 +23,8 @@ const ListPage = () => {
   });
 
   useEffect(() => {
+    console.log("isIntersecting", isIntersecting);
+    console.log("page", page);
     if (isIntersecting && page < MAX_SOLPLACE_LOG_PAGES) {
       fetchMoreLogs();
     }
