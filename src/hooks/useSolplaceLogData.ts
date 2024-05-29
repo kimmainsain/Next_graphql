@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
-import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
+import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/queries";
 
 export const useSolplaceLogData = (id: string | string[]) => {
   const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOG_BY_ID, {

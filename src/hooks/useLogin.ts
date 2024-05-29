@@ -5,6 +5,7 @@ import { LOGIN_MUTATION } from "@/graphql/mutations";
 import { authState } from "@/recoils/authState";
 import { useSetRecoilState } from "recoil";
 import { LoginInputType } from "@/types/login/loginInputType";
+import { setCookie } from "@/utils/cookies";
 
 export const useLogin = () => {
   const [login] = useMutation(LOGIN_MUTATION);
@@ -25,6 +26,8 @@ export const useLogin = () => {
       const { accessToken, name } = data.login;
       localStorage.setItem("token", accessToken);
       localStorage.setItem("name", name);
+      await setCookie("token", accessToken);
+      await setCookie("name", name);
       setAuthState(true);
       router.push("/");
     } catch (error) {

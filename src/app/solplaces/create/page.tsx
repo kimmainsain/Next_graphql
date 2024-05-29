@@ -5,26 +5,19 @@ import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
-import { CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME } from "@/graphql/mutations";
-import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { usePhoto } from "@/hooks/usePhoto";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
-import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
+import { useSolplaceLogCreate } from "@/hooks/useSolplaceLogCreate";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import ButtonField from "@/components/common/Button/ButtonField";
+import ModalField from "@/components/common/Modal/ModalField";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const setHeaderText = useSetRecoilState(headerTextState);
-  const [createSolplaceLogBySolplaceName] = useMutation(
-    CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME,
-    {
-      refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
-    }
-  );
   const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {
@@ -33,6 +26,7 @@ const CreatePage = () => {
     },
   });
   const { photos, handleAddPhoto, handleRemovePhoto } = usePhoto();
+  const { handleCreate, modal, setModal } = useSolplaceLogCreate();
   const title = watch("title");
   const content = watch("content");
 
@@ -45,26 +39,18 @@ const CreatePage = () => {
     setHeaderText("솔플레이스 로그 등록");
   }, []);
 
-  const handleCreate = async () => {
-    try {
-      const result = await createSolplaceLogBySolplaceName({
-        variables: {
-          solplaceName: title,
-          createSolplaceLogInput: {
-            introduction: content,
-            images: photos,
-          },
-        },
-      });
-      router.push("/solplaces/list");
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
+      <ModalField
+        message={modal.message}
+        buttonMessage={modal.buttonMessage}
+        isVisible={modal.isVisible}
+        onClose={() => {
+          setModal({ ...modal, isVisible: false });
+          router.push("/solplaces/list");
+        }}
+      />
+
       <div className="w-full p-4">
         <div className="flex items-center mb-2">
           <div className="text-sm font-semibold text-gray-500">
@@ -103,7 +89,7 @@ const CreatePage = () => {
           </div>
           <div className="flex justify-center fixed bottom-12 w-full px-4">
             <ButtonField
-              onClick={handleSubmit(handleCreate)}
+              onClick={handleSubmit(() => handleCreate(title, content, photos))}
               enabled={isButtonEnabled}
               text="솔플레이스 로그 등록"
               type="submit"

@@ -10,7 +10,7 @@ import {
   BUTTON_MESSAGE,
 } from "@/constants/modalText";
 import { ModalFieldType } from "@/types/modal/modalType";
-import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/queries";
 
 export const useSolplaceLogMutation = (id: string | string[]) => {
   const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID, {
