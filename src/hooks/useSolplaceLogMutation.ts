@@ -10,10 +10,15 @@ import {
   BUTTON_MESSAGE,
 } from "@/constants/modalText";
 import { ModalFieldType } from "@/types/modal/modalType";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 
 export const useSolplaceLogMutation = (id: string | string[]) => {
-  const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID);
-  const [updateSolplaceLogById] = useMutation(UPDATE_SOLPLACE_LOG_BY_ID);
+  const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID, {
+    refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
+  });
+  const [updateSolplaceLogById] = useMutation(UPDATE_SOLPLACE_LOG_BY_ID, {
+    refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
+  });
   const [modal, setModal] = useState<ModalFieldType>({
     isVisible: false,
     message: "",

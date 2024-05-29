@@ -10,6 +10,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { usePhoto } from "@/hooks/usePhoto";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
@@ -19,7 +20,10 @@ const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const setHeaderText = useSetRecoilState(headerTextState);
   const [createSolplaceLogBySolplaceName] = useMutation(
-    CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME
+    CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME,
+    {
+      refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
+    }
   );
   const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({

@@ -4,7 +4,6 @@ import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 export const useSolplaceLogList = (page: number) => {
   const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {
     variables: { page },
-    fetchPolicy: "network-only",
   });
 
   const fetchMoreLogs = async (nextPage: number) => {
