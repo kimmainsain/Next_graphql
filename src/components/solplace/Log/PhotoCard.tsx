@@ -1,4 +1,5 @@
 import { PhotoCardType } from "@/types/card/PhotoCardType";
+import closeButton from "@/assets/png/Button/closeButton.png";
 import Image from "next/image";
 
 const PhotoCard = ({ photos, onAddPhoto, onRemovePhoto }: PhotoCardType) => {
@@ -28,10 +29,10 @@ const PhotoCard = ({ photos, onAddPhoto, onRemovePhoto }: PhotoCardType) => {
             </div>
           )}
           <button
-            className="absolute top-1 right-1 bg-white rounded-full cursor-pointer"
+            className="absolute top-1 right-1 w-4 h-4 rounded-full cursor-pointer flex items-center justify-center bg-black"
             onClick={() => onRemovePhoto(index)}
           >
-            <div className="text-xs">X</div>
+            <Image src={closeButton} alt="closeButton" />
           </button>
         </div>
       ))}
