@@ -21,8 +21,6 @@ const ListPage = () => {
   });
 
   useEffect(() => {
-    console.log("isIntersecting", isIntersecting);
-    console.log("page", page);
     if (
       isIntersecting &&
       page <=

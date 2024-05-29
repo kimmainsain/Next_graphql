@@ -7,10 +7,6 @@ export const FETCH_SOLPLACE_LOGS = gql`
       introduction
       solplaceName
       images
-      userId
-      createdAt
-      updatedAt
-      deletedAt
     }
   }
 `;
@@ -22,10 +18,6 @@ export const FETCH_SOLPLACE_LOG_BY_ID = gql`
       introduction
       solplaceName
       images
-      userId
-      createdAt
-      updatedAt
-      deletedAt
     }
   }
 `;
