@@ -36,7 +36,6 @@ export const useSolplaceLogMutation = (id: string | string[]) => {
           },
         },
       });
-      console.log(result);
       setModal({
         isVisible: true,
         message: SUCCESS_MESSAGE.VALID_UPDATE,
@@ -58,7 +57,6 @@ export const useSolplaceLogMutation = (id: string | string[]) => {
           id,
         },
       });
-      console.log(result);
       setModal({
         isVisible: true,
         message: SUCCESS_MESSAGE.VALID_DELETE,

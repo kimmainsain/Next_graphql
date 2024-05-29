@@ -21,10 +21,6 @@ export const CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME = gql`
       introduction
       solplaceName
       images
-      userId
-      createdAt
-      updatedAt
-      deletedAt
     }
   }
 `;
@@ -44,7 +40,9 @@ export const UPDATE_SOLPLACE_LOG_BY_ID = gql`
       id: $id
       updateSolplaceLogInput: $updateSolplaceLogInput
     ) {
+      id
       introduction
+      images
     }
   }
 `;

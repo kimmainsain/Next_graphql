@@ -5,16 +5,6 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const pathUrl = request.nextUrl.pathname;
 
-  // 정적 파일 및 API 경로를 필터링
-  if (
-    pathUrl.startsWith("/_next") ||
-    pathUrl.startsWith("/static") ||
-    pathUrl.startsWith("/api") ||
-    pathUrl.startsWith("/favicon")
-  ) {
-    return NextResponse.next();
-  }
-
   // 로그인이 필요없는 페이지
   if (
     pathUrl === "/" ||
@@ -31,3 +21,7 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
