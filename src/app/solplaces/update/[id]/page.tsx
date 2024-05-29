@@ -1,27 +1,17 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
-import {
-  DELETE_SOLPLACE_LOG_BY_ID,
-  UPDATE_SOLPLACE_LOG_BY_ID,
-} from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
 import { usePhoto } from "@/hooks/usePhoto";
-import { ModalFieldType } from "@/types/modal/modalType";
-
-import {
-  ERROR_MESSAGE,
-  SUCCESS_MESSAGE,
-  BUTTON_MESSAGE,
-} from "@/constants/modalText";
+import { useSolplaceLogMutation } from "@/hooks/useSolplaceLogMutation";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -36,15 +26,7 @@ const SolplaceUpdatePage = () => {
     variables: { id: params.id },
   });
   const router = useRouter();
-  const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID);
-  const [updateSolplaceLogById] = useMutation(UPDATE_SOLPLACE_LOG_BY_ID);
   const setHeaderText = useSetRecoilState(headerTextState);
-  const [modal, setModal] = useState<ModalFieldType>({
-    isVisible: false,
-    message: "",
-    buttonMessage: "",
-  });
-
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
     {
       defaultValues: {
@@ -54,6 +36,9 @@ const SolplaceUpdatePage = () => {
     }
   );
   const { photos, setPhotos, handleAddPhoto, handleRemovePhoto } = usePhoto();
+  const { handleUpdate, handleDelete, modal, setModal } =
+    useSolplaceLogMutation(params.id);
+
   const title = watch("title");
   const content = watch("content");
 
@@ -73,54 +58,6 @@ const SolplaceUpdatePage = () => {
     if (title && content && photos.length > 0) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
   }, [title, content, photos]);
-
-  const handleUpdate = async () => {
-    try {
-      const result = await updateSolplaceLogById({
-        variables: {
-          id: params.id,
-          updateSolplaceLogInput: {
-            introduction: content,
-            images: ["https://picsum.photos/300/300"],
-          },
-        },
-      });
-      console.log(result);
-      setModal({
-        isVisible: true,
-        message: SUCCESS_MESSAGE.VALID_UPDATE,
-        buttonMessage: BUTTON_MESSAGE.CONFIRM,
-      });
-    } catch (error) {
-      setModal({
-        isVisible: true,
-        message: ERROR_MESSAGE.INVALID_UPDATE_ERROR,
-        buttonMessage: BUTTON_MESSAGE.CONFIRM,
-      });
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      const result = await deleteSolplaceLogById({
-        variables: {
-          id: params.id,
-        },
-      });
-      console.log(result);
-      setModal({
-        isVisible: true,
-        message: SUCCESS_MESSAGE.VALID_DELETE,
-        buttonMessage: BUTTON_MESSAGE.CONFIRM,
-      });
-    } catch (error) {
-      setModal({
-        isVisible: true,
-        message: ERROR_MESSAGE.INVALID_DELETE_ERROR,
-        buttonMessage: BUTTON_MESSAGE.CONFIRM,
-      });
-    }
-  };
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error}`;
@@ -170,13 +107,13 @@ const SolplaceUpdatePage = () => {
           </div>
           <div className="flex gap-2 fixed bottom-12 w-full px-4">
             <ButtonMediumField
-              onClick={handleSubmit(handleDelete)}
+              onClick={handleSubmit(() => handleDelete)}
               enabled={false}
               text="로그 삭제"
               type="submit"
             />
             <ButtonMediumField
-              onClick={handleSubmit(handleUpdate)}
+              onClick={handleSubmit(() => handleUpdate(content, photos))}
               enabled={isButtonEnabled}
               text="로그 수정"
               type="submit"
