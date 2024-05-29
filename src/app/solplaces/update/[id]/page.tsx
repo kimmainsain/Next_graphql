@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
 import { usePhoto } from "@/hooks/usePhoto";
+import { ModalFieldType } from "@/types/modal/modalType";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -28,6 +29,11 @@ const SolplaceUpdatePage = () => {
   const router = useRouter();
   const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID);
   const setHeaderText = useSetRecoilState(headerTextState);
+  const [modal, setModal] = useState<ModalFieldType>({
+    isVisible: false,
+    message: "",
+    buttonMessage: "",
+  });
 
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
     {
@@ -69,10 +75,18 @@ const SolplaceUpdatePage = () => {
           id: params.id,
         },
       });
-      console.log("result", result);
-      router.back();
+      console.log(result);
+      setModal({
+        isVisible: true,
+        message: "삭제가 완료되었습니다.",
+        buttonMessage: "확인",
+      });
     } catch (error) {
-      console.log(error);
+      setModal({
+        isVisible: true,
+        message: "삭제에 실패하였습니다.",
+        buttonMessage: "확인",
+      });
     }
   };
 
@@ -81,6 +95,15 @@ const SolplaceUpdatePage = () => {
 
   return (
     <>
+      <ModalField
+        message={modal.message}
+        buttonMessage={modal.buttonMessage}
+        isVisible={modal.isVisible}
+        onClose={() => {
+          setModal({ ...modal, isVisible: false });
+          router.back();
+        }}
+      />
       <div className="w-full p-4">
         <div className="flex items-center mb-2">
           <div className="text-sm font-semibold text-gray-500">
