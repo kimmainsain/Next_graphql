@@ -47,7 +47,7 @@ const CreatePage = () => {
         isVisible={modal.isVisible}
         onClose={() => {
           setModal({ ...modal, isVisible: false });
-          router.back();
+          router.push("/solplaces/list");
         }}
       />
 

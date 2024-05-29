@@ -2,10 +2,13 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME } from "@/graphql/mutations";
 import { FETCH_SOLPLACE_LOGS } from "@/graphql/queries";
-import { useRouter } from "next/navigation";
+import {
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+  BUTTON_MESSAGE,
+} from "@/constants/modalText";
 
 export const useSolplaceLogCreate = () => {
-  const router = useRouter();
   const [modal, setModal] = useState({
     isVisible: false,
     message: "",
@@ -34,10 +37,17 @@ export const useSolplaceLogCreate = () => {
           },
         },
       });
-      router.push("/solplaces/list");
-      console.log(result);
+      setModal({
+        isVisible: true,
+        message: SUCCESS_MESSAGE.VALID_CREATE,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
+      });
     } catch (error) {
-      console.log(error);
+      setModal({
+        isVisible: true,
+        message: ERROR_MESSAGE.INVALID_CREATE_ERROR,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
+      });
     }
   };
 
