@@ -27,7 +27,7 @@ export const useSolplaceLogMutation = (id: string | string[]) => {
           id,
           updateSolplaceLogInput: {
             introduction: content,
-            images: ["https://picsum.photos/300/300"],
+            images: photos,
           },
         },
       });

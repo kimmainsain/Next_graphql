@@ -1,17 +1,14 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useQuery } from "@apollo/client";
-import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
-import { headerTextState } from "@/recoils/headerState";
 import { usePhoto } from "@/hooks/usePhoto";
 import { useSolplaceLogMutation } from "@/hooks/useSolplaceLogMutation";
+import { useSolplaceLogData } from "@/hooks/useSolplaceLogData";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -20,13 +17,10 @@ import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
 
 const SolplaceUpdatePage = () => {
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const params = useParams();
-  const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOG_BY_ID, {
-    variables: { id: params.id },
-  });
   const router = useRouter();
-  const setHeaderText = useSetRecoilState(headerTextState);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const { data, loading, error } = useSolplaceLogData(params.id);
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
     {
       defaultValues: {
@@ -44,7 +38,6 @@ const SolplaceUpdatePage = () => {
 
   useEffect(() => {
     if (data) {
-      setHeaderText(`${data.fetchSolplaceLogById.solplaceName} 수정`);
       const photosProps = JSON.parse(data.fetchSolplaceLogById.images);
       setPhotos(photosProps);
       reset({
@@ -107,7 +100,7 @@ const SolplaceUpdatePage = () => {
           </div>
           <div className="flex gap-2 fixed bottom-12 w-full px-4">
             <ButtonMediumField
-              onClick={handleSubmit(() => handleDelete)}
+              onClick={handleSubmit(() => handleDelete())}
               enabled={false}
               text="로그 삭제"
               type="submit"
