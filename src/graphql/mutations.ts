@@ -34,3 +34,17 @@ export const DELETE_SOLPLACE_LOG_BY_ID = gql`
     deleteSolplaceLogById(id: $id)
   }
 `;
+
+export const UPDATE_SOLPLACE_LOG_BY_ID = gql`
+  mutation UpdateSolplaceLogById(
+    $id: ID!
+    $updateSolplaceLogInput: UpdateSolplaceLogInput!
+  ) {
+    updateSolplaceLogById(
+      id: $id
+      updateSolplaceLogInput: $updateSolplaceLogInput
+    ) {
+      introduction
+    }
+  }
+`;

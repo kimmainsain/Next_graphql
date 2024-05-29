@@ -7,12 +7,21 @@ import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
-import { DELETE_SOLPLACE_LOG_BY_ID } from "@/graphql/mutations";
+import {
+  DELETE_SOLPLACE_LOG_BY_ID,
+  UPDATE_SOLPLACE_LOG_BY_ID,
+} from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
 import { usePhoto } from "@/hooks/usePhoto";
 import { ModalFieldType } from "@/types/modal/modalType";
+
+import {
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+  BUTTON_MESSAGE,
+} from "@/constants/modalText";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -28,6 +37,7 @@ const SolplaceUpdatePage = () => {
   });
   const router = useRouter();
   const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID);
+  const [updateSolplaceLogById] = useMutation(UPDATE_SOLPLACE_LOG_BY_ID);
   const setHeaderText = useSetRecoilState(headerTextState);
   const [modal, setModal] = useState<ModalFieldType>({
     isVisible: false,
@@ -60,12 +70,34 @@ const SolplaceUpdatePage = () => {
   }, [data]);
 
   useEffect(() => {
-    if (title && content) setIsButtonEnabled(true);
+    if (title && content && photos.length > 0) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
-  }, [title, content]);
+  }, [title, content, photos]);
 
-  const handleUpdate = () => {
-    console.log("Login");
+  const handleUpdate = async () => {
+    try {
+      const result = await updateSolplaceLogById({
+        variables: {
+          id: params.id,
+          updateSolplaceLogInput: {
+            introduction: content,
+            images: ["https://picsum.photos/300/300"],
+          },
+        },
+      });
+      console.log(result);
+      setModal({
+        isVisible: true,
+        message: SUCCESS_MESSAGE.VALID_UPDATE,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
+      });
+    } catch (error) {
+      setModal({
+        isVisible: true,
+        message: ERROR_MESSAGE.INVALID_UPDATE_ERROR,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
+      });
+    }
   };
 
   const handleDelete = async () => {
@@ -78,14 +110,14 @@ const SolplaceUpdatePage = () => {
       console.log(result);
       setModal({
         isVisible: true,
-        message: "삭제가 완료되었습니다.",
-        buttonMessage: "확인",
+        message: SUCCESS_MESSAGE.VALID_DELETE,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
       });
     } catch (error) {
       setModal({
         isVisible: true,
-        message: "삭제에 실패하였습니다.",
-        buttonMessage: "확인",
+        message: ERROR_MESSAGE.INVALID_DELETE_ERROR,
+        buttonMessage: BUTTON_MESSAGE.CONFIRM,
       });
     }
   };
