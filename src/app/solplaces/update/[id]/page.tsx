@@ -1,29 +1,26 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useQuery } from "@apollo/client";
-import { FETCH_SOLPLACE_LOG_BY_ID } from "@/graphql/querys";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
+import { useRouter } from "next/navigation";
+import { usePhoto } from "@/hooks/usePhoto";
+import { useSolplaceLogMutation } from "@/hooks/useSolplaceLogMutation";
+import { useSolplaceLogData } from "@/hooks/useSolplaceLogData";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
 import ButtonMediumField from "@/components/common/Button/ButtonMediumField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
-import { useSetRecoilState } from "recoil";
-import { headerTextState } from "@/recoils/headerState";
 
 const SolplaceUpdatePage = () => {
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const params = useParams();
-  const { data, loading, error } = useQuery(FETCH_SOLPLACE_LOG_BY_ID, {
-    variables: { id: params.id },
-  });
-  const setHeaderText = useSetRecoilState(headerTextState);
-
+  const router = useRouter();
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const { data, loading, error } = useSolplaceLogData(params.id);
   const { handleSubmit, register, watch, reset } = useForm<VisitedLogInputType>(
     {
       defaultValues: {
@@ -32,13 +29,17 @@ const SolplaceUpdatePage = () => {
       },
     }
   );
+  const { photos, setPhotos, handleAddPhoto, handleRemovePhoto } = usePhoto();
+  const { handleUpdate, handleDelete, modal, setModal } =
+    useSolplaceLogMutation(params.id);
 
   const title = watch("title");
   const content = watch("content");
 
   useEffect(() => {
     if (data) {
-      setHeaderText(`${data.fetchSolplaceLogById.solplaceName} 수정`);
+      const photosProps = JSON.parse(data.fetchSolplaceLogById.images);
+      setPhotos(photosProps);
       reset({
         title: data.fetchSolplaceLogById.solplaceName,
         content: data.fetchSolplaceLogById.introduction,
@@ -47,33 +48,24 @@ const SolplaceUpdatePage = () => {
   }, [data]);
 
   useEffect(() => {
-    if (title && content) setIsButtonEnabled(true);
+    if (title && content && photos.length > 0) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
-  }, [title, content]);
-
-  const handleAddPhoto = () => {
-    console.log("Add Photo");
-  };
-
-  const handleRemovePhoto = (index: number) => {
-    console.log("Remove Photo", index);
-  };
-
-  const handleUpdate = () => {
-    console.log("Login");
-  };
-
-  const handleDelete = () => {
-    console.log("Delete");
-  };
+  }, [title, content, photos]);
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error}`;
-  console.log(data?.fetchSolplaceLogById);
-  const photos = JSON.parse(data?.fetchSolplaceLogById.images);
 
   return (
     <>
+      <ModalField
+        message={modal.message}
+        buttonMessage={modal.buttonMessage}
+        isVisible={modal.isVisible}
+        onClose={() => {
+          setModal({ ...modal, isVisible: false });
+          router.back();
+        }}
+      />
       <div className="w-full p-4">
         <div className="flex items-center mb-2">
           <div className="text-sm font-semibold text-gray-500">
@@ -108,13 +100,13 @@ const SolplaceUpdatePage = () => {
           </div>
           <div className="flex gap-2 fixed bottom-12 w-full px-4">
             <ButtonMediumField
-              onClick={handleSubmit(handleDelete)}
+              onClick={handleSubmit(() => handleDelete())}
               enabled={false}
               text="로그 삭제"
               type="submit"
             />
             <ButtonMediumField
-              onClick={handleSubmit(handleUpdate)}
+              onClick={handleSubmit(() => handleUpdate(content, photos))}
               enabled={isButtonEnabled}
               text="로그 수정"
               type="submit"

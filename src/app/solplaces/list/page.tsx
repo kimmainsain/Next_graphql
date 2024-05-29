@@ -1,56 +1,37 @@
 "use client";
-import { useQuery } from "@apollo/client";
-import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
 import { useState, useEffect } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 import { SolplaceLog } from "@/types/solplace/solplaceLogType";
-import { MAX_SOLPLACE_LOG_PAGES } from "@/constants/solplaceLog";
+import {
+  MAX_SOLPLACE_LOG_PAGES,
+  SOLPLACE_LOG_PAGES_SCROOL_SIZE,
+} from "@/constants/solplaceLog";
+import { useSolplaceLogList } from "@/hooks/useSolplaceLogList";
 
 import Image from "next/image";
 import pencli from "@/assets/png/List/pencli.png";
-import SolplaceLogCard from "@/components/solplace/List/SolplaceLogCard";
+import SolplaceLogCard from "@/components/solplace/list/SolplaceLogCard";
 import Link from "next/link";
 
 const ListPage = () => {
   const [page, setPage] = useState<number>(1);
-  const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {
-    variables: { page },
-  });
-  const [logs, setLogs] = useState<SolplaceLog[]>([]);
+  const { data, loading, error, fetchMoreLogs } = useSolplaceLogList(1);
   const { isIntersecting, ref } = useIntersectionObserver({
     threshold: 0.5,
   });
 
   useEffect(() => {
-    if (isIntersecting && page < MAX_SOLPLACE_LOG_PAGES) {
-      fetchMoreLogs();
+    console.log("isIntersecting", isIntersecting);
+    console.log("page", page);
+    if (
+      isIntersecting &&
+      page <=
+        Math.floor(MAX_SOLPLACE_LOG_PAGES / SOLPLACE_LOG_PAGES_SCROOL_SIZE)
+    ) {
+      fetchMoreLogs(page + 1);
+      setPage((prev) => prev + 1);
     }
   }, [isIntersecting]);
-
-  useEffect(() => {
-    if (data) {
-      setLogs([...logs, ...data.fetchSolplaceLogs]);
-      console.log("data", data);
-    }
-  }, [data]);
-
-  const fetchMoreLogs = async () => {
-    await fetchMore({
-      variables: { page: page + 1 },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) {
-          return prev;
-        }
-        return {
-          fetchSolplaceLogs: [
-            ...prev.fetchSolplaceLogs,
-            ...fetchMoreResult.fetchSolplaceLogs,
-          ],
-        };
-      },
-    });
-    setPage((prevPage) => prevPage + 1);
-  };
 
   if (loading && page === 1) return "Loading...";
   if (error) return `Error! ${error}`;
@@ -58,7 +39,7 @@ const ListPage = () => {
   return (
     <div>
       <div className="p-4 mb-12 grid grid-cols-2 gap-4">
-        {logs.map((log: SolplaceLog) => (
+        {data?.fetchSolplaceLogs?.map((log: SolplaceLog) => (
           <SolplaceLogCard key={log.id} log={log} />
         ))}
       </div>

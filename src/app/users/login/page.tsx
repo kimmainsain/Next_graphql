@@ -6,6 +6,7 @@ import { LoginInputType } from "@/types/login/loginInputType";
 import InputLoginField from "@/components/common/Input/InputLoginField";
 import ButtonField from "@/components/common/Button/ButtonField";
 import ModalField from "@/components/common/Modal/ModalField";
+import { ERROR_MESSAGE, BUTTON_MESSAGE } from "@/constants/modalText";
 
 const LoginPage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -22,11 +23,12 @@ const LoginPage = () => {
   return (
     <form className="flex flex-col py-2 mt-20">
       <ModalField
-        message="잘못된 로그인 정보입니다."
-        buttonMessage="다시 확인하기"
+        message={ERROR_MESSAGE.INVALID_LOGIN_ERROR}
+        buttonMessage={BUTTON_MESSAGE.RECONFIRM}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
       />
+
       <div className="mx-4 my-3">
         <InputLoginField
           label="이메일"

@@ -1,12 +1,6 @@
 "use client";
 import ButtonField from "@/components/common/Button/ButtonField";
-
-type ModalFieldType = {
-  message: string;
-  isVisible: boolean;
-  onClose: () => void;
-  buttonMessage: string;
-};
+import { ModalFieldType } from "@/types/modal/modalType";
 
 const ModalField = ({
   message,

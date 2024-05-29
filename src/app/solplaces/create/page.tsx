@@ -1,48 +1,66 @@
 "use client";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
-import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import InputField from "@/components/common/Input/InputLoginField";
-import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
-import ButtonField from "@/components/common/Button/ButtonField";
 import { VisitedLogInputType } from "@/types/input/inputType";
 import { useSetRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
+import { CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME } from "@/graphql/mutations";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
+import { usePhoto } from "@/hooks/usePhoto";
+import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
+
+import InputField from "@/components/common/Input/InputLoginField";
+import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
+import ButtonField from "@/components/common/Button/ButtonField";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [photos, setPhotos] = useState<string[]>([]);
   const setHeaderText = useSetRecoilState(headerTextState);
-
+  const [createSolplaceLogBySolplaceName] = useMutation(
+    CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME,
+    {
+      refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
+    }
+  );
+  const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {
       title: "",
       content: "",
     },
   });
-
+  const { photos, handleAddPhoto, handleRemovePhoto } = usePhoto();
   const title = watch("title");
   const content = watch("content");
+
   useEffect(() => {
-    if (title && content) setIsButtonEnabled(true);
+    if (title && content && photos.length > 0) setIsButtonEnabled(true);
     else setIsButtonEnabled(false);
-  }, [title, content]);
+  }, [title, content, photos]);
 
   useEffect(() => {
     setHeaderText("솔플레이스 로그 등록");
   }, []);
 
-  const handleAddPhoto = () => {
-    console.log("Add Photo");
-  };
-
-  const handleRemovePhoto = (index: number) => {
-    console.log("Remove Photo", index);
-  };
-
-  const handleCreate = () => {
-    console.log("솔플레이스 로그 등록");
+  const handleCreate = async () => {
+    try {
+      const result = await createSolplaceLogBySolplaceName({
+        variables: {
+          solplaceName: title,
+          createSolplaceLogInput: {
+            introduction: content,
+            images: photos,
+          },
+        },
+      });
+      router.push("/solplaces/list");
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
