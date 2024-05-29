@@ -1,0 +1,3 @@
+export const MAX_SOLPLACE_LOG_PAGES = 15;
+export const SOLPLACE_LOG_PAGES_SCROOL_SIZE = 6;
+export const MAX_SOLPLACE_LOG_PICTURES = 5;
