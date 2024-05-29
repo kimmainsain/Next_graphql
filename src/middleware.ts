@@ -1,29 +1,33 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
-  // Getting cookies from the request using the `RequestCookies` API
-  let cookie = request.cookies.get("nextjs");
-  console.log("cookie", cookie); // => { name: 'nextjs', value: 'fast', Path: '/' }
-  const allCookies = request.cookies.getAll();
-  console.log("allCookies", allCookies); // => [{ name: 'nextjs', value: 'fast' }]
+  const token = request.cookies.get("token")?.value;
+  const pathUrl = request.nextUrl.pathname;
 
-  request.cookies.has("nextjs"); // => true
-  request.cookies.delete("nextjs");
-  request.cookies.has("nextjs"); // => false
+  // 정적 파일 및 API 경로를 필터링
+  if (
+    pathUrl.startsWith("/_next") ||
+    pathUrl.startsWith("/static") ||
+    pathUrl.startsWith("/api") ||
+    pathUrl.startsWith("/favicon")
+  ) {
+    return NextResponse.next();
+  }
 
-  // Setting cookies on the response using the `ResponseCookies` API
-  const response = NextResponse.next();
-  response.cookies.set("vercel", "fast");
-  response.cookies.set({
-    name: "vercel",
-    value: "fast",
-    path: "/",
-  });
-  cookie = response.cookies.get("vercel");
-  console.log(cookie); // => { name: 'vercel', value: 'fast', Path: '/' }
-  // The outgoing response will have a `Set-Cookie:vercel=fast;path=/` header.
+  // 로그인이 필요없는 페이지
+  if (
+    pathUrl === "/" ||
+    pathUrl === "/users/login" ||
+    pathUrl === "/users/redirect"
+  ) {
+    return NextResponse.next();
+  }
 
-  return response;
+  // 로그인이 필요한 페이지 && 토큰이 없는 경우
+  if (!token) {
+    return NextResponse.redirect(new URL("/users/redirect", request.url));
+  }
+
+  return NextResponse.next();
 }
