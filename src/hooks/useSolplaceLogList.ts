@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/queries";
 
 export const useSolplaceLogList = (page: number) => {
   const { data, loading, error, fetchMore } = useQuery(FETCH_SOLPLACE_LOGS, {

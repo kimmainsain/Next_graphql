@@ -10,7 +10,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { usePhoto } from "@/hooks/usePhoto";
 import { MAX_SOLPLACE_LOG_PICTURES } from "@/constants/solplaceLog";
-import { FETCH_SOLPLACE_LOGS } from "@/graphql/querys";
+import { FETCH_SOLPLACE_LOGS } from "@/graphql/queries";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
