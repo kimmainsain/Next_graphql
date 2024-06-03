@@ -6,11 +6,13 @@ import { LoginInputType } from "@/types/login/loginInputType";
 import InputLoginField from "@/components/common/Input/InputLoginField";
 import ButtonField from "@/components/common/Button/ButtonField";
 import ModalField from "@/components/common/Modal/ModalField";
-import { ERROR_MESSAGE, BUTTON_MESSAGE } from "@/constants/modalText";
+import { modalState } from "@/recoils/modalState";
+import { useRecoilState } from "recoil";
 
 const LoginPage = () => {
+  const [modal, setModal] = useRecoilState(modalState);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const { handleLogin, isVisible, setIsVisible } = useLogin();
+  const { handleLogin } = useLogin();
   const { handleSubmit, register, watch } = useForm<LoginInputType>();
   const email = watch("email");
   const password = watch("password");
@@ -23,10 +25,10 @@ const LoginPage = () => {
   return (
     <form className="flex flex-col py-2 mt-20">
       <ModalField
-        message={ERROR_MESSAGE.INVALID_LOGIN_ERROR}
-        buttonMessage={BUTTON_MESSAGE.RECONFIRM}
-        isVisible={isVisible}
-        onClose={() => setIsVisible(false)}
+        message={modal.message}
+        buttonMessage={modal.buttonMessage}
+        isVisible={modal.isVisible}
+        onClose={() => setModal({ ...modal, isVisible: false })}
       />
 
       <div className="mx-4 my-3">

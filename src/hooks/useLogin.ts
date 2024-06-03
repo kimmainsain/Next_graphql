@@ -1,17 +1,18 @@
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LOGIN_MUTATION } from "@/graphql/mutations";
 import { authState } from "@/recoils/authState";
 import { useSetRecoilState } from "recoil";
 import { LoginInputType } from "@/types/login/loginInputType";
 import { setCookie } from "@/utils/cookies";
+import { modalState } from "@/recoils/modalState";
+import { ERROR_MESSAGE, BUTTON_MESSAGE } from "@/constants/modalText";
 
 export const useLogin = () => {
   const [login] = useMutation(LOGIN_MUTATION);
-  const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
   const setAuthState = useSetRecoilState(authState);
+  const setModal = useSetRecoilState(modalState);
 
   const handleLogin = async ({ email, password }: LoginInputType) => {
     try {
@@ -31,14 +32,14 @@ export const useLogin = () => {
       setAuthState(true);
       router.push("/");
     } catch (error) {
-      setIsVisible(true);
+      setModal({
+        isVisible: true,
+        message: ERROR_MESSAGE.INVALID_LOGIN_ERROR,
+        buttonMessage: BUTTON_MESSAGE.RECONFIRM,
+      });
       console.log(error);
     }
   };
 
-  return {
-    handleLogin,
-    isVisible,
-    setIsVisible,
-  };
+  return { handleLogin };
 };
