@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { usePhoto } from "@/hooks/usePhoto";
 import { useSolplaceLogMutation } from "@/hooks/useSolplaceLogMutation";
 import { useSolplaceLogData } from "@/hooks/useSolplaceLogData";
+import { modalState } from "@/recoils/modalState";
+import { useRecoilState } from "recoil";
 
 import InputField from "@/components/common/Input/InputLoginField";
 import ModalField from "@/components/common/Modal/ModalField";
@@ -17,6 +19,7 @@ import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import PhotoCard from "@/components/solplace/Log/PhotoCard";
 
 const SolplaceUpdatePage = () => {
+  const [modal, setModal] = useRecoilState(modalState);
   const params = useParams();
   const router = useRouter();
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -30,8 +33,7 @@ const SolplaceUpdatePage = () => {
     }
   );
   const { photos, setPhotos, handleAddPhoto, handleRemovePhoto } = usePhoto();
-  const { handleUpdate, handleDelete, modal, setModal } =
-    useSolplaceLogMutation(params.id);
+  const { handleUpdate, handleDelete } = useSolplaceLogMutation(params.id);
 
   const title = watch("title");
   const content = watch("content");

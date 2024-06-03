@@ -7,14 +7,11 @@ import {
   SUCCESS_MESSAGE,
   BUTTON_MESSAGE,
 } from "@/constants/modalText";
+import { modalState } from "@/recoils/modalState";
+import { useSetRecoilState } from "recoil";
 
 export const useSolplaceLogCreate = () => {
-  const [modal, setModal] = useState({
-    isVisible: false,
-    message: "",
-    buttonMessage: "",
-  });
-
+  const setModal = useSetRecoilState(modalState);
   const [createSolplaceLogBySolplaceName] = useMutation(
     CREATE_SOLPLACE_LOG_BY_SOLPLACE_NAME,
     {
@@ -28,7 +25,7 @@ export const useSolplaceLogCreate = () => {
     photos: string[]
   ) => {
     try {
-      const result = await createSolplaceLogBySolplaceName({
+      await createSolplaceLogBySolplaceName({
         variables: {
           solplaceName: title,
           createSolplaceLogInput: {
@@ -51,5 +48,5 @@ export const useSolplaceLogCreate = () => {
     }
   };
 
-  return { handleCreate, modal, setModal };
+  return { handleCreate };
 };

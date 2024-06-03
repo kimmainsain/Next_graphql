@@ -3,7 +3,7 @@ import PhotoCard from "@/components/solplace/Log/PhotoCard";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { VisitedLogInputType } from "@/types/input/inputType";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { headerTextState } from "@/recoils/headerState";
 import { useRouter } from "next/navigation";
 import { usePhoto } from "@/hooks/usePhoto";
@@ -14,10 +14,12 @@ import InputField from "@/components/common/Input/InputLoginField";
 import InputTextAreaField from "@/components/common/Input/InputTextAreaField";
 import ButtonField from "@/components/common/Button/ButtonField";
 import ModalField from "@/components/common/Modal/ModalField";
+import { modalState } from "@/recoils/modalState";
 
 const CreatePage = () => {
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
   const setHeaderText = useSetRecoilState(headerTextState);
+  const [modal, setModal] = useRecoilState(modalState);
   const router = useRouter();
   const { handleSubmit, register, watch } = useForm<VisitedLogInputType>({
     defaultValues: {
@@ -26,7 +28,7 @@ const CreatePage = () => {
     },
   });
   const { photos, handleAddPhoto, handleRemovePhoto } = usePhoto();
-  const { handleCreate, modal, setModal } = useSolplaceLogCreate();
+  const { handleCreate } = useSolplaceLogCreate();
   const title = watch("title");
   const content = watch("content");
 

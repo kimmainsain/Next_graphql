@@ -1,5 +1,4 @@
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
 import {
   DELETE_SOLPLACE_LOG_BY_ID,
   UPDATE_SOLPLACE_LOG_BY_ID,
@@ -9,25 +8,22 @@ import {
   SUCCESS_MESSAGE,
   BUTTON_MESSAGE,
 } from "@/constants/modalText";
-import { ModalFieldType } from "@/types/modal/modalType";
 import { FETCH_SOLPLACE_LOGS } from "@/graphql/queries";
+import { modalState } from "@/recoils/modalState";
+import { useSetRecoilState } from "recoil";
 
 export const useSolplaceLogMutation = (id: string | string[]) => {
+  const setModal = useSetRecoilState(modalState);
   const [deleteSolplaceLogById] = useMutation(DELETE_SOLPLACE_LOG_BY_ID, {
     refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
   });
   const [updateSolplaceLogById] = useMutation(UPDATE_SOLPLACE_LOG_BY_ID, {
     refetchQueries: [{ query: FETCH_SOLPLACE_LOGS, variables: { page: 1 } }],
   });
-  const [modal, setModal] = useState<ModalFieldType>({
-    isVisible: false,
-    message: "",
-    buttonMessage: "",
-  });
 
   const handleUpdate = async (content: string, photos: string[]) => {
     try {
-      const result = await updateSolplaceLogById({
+      await updateSolplaceLogById({
         variables: {
           id,
           updateSolplaceLogInput: {
@@ -74,7 +70,5 @@ export const useSolplaceLogMutation = (id: string | string[]) => {
   return {
     handleUpdate,
     handleDelete,
-    modal,
-    setModal,
   };
 };
